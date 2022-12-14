@@ -1,5 +1,7 @@
+extern crate core;
+
+mod person_pablo;
+
 fn main() {
-    println!("Hello, world!");
-    println!("test_3");
-    //test
+    person_pablo::run();
 }
