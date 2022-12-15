@@ -1,13 +1,15 @@
 use std::io;
 
 fn main() {
-    //Creación de las variables para dibujar el menú.
+    ///Creación de las variables para dibujar el menú.
     let linea = "-";
     let igual = "=";
     let menu = "| Aplicación entrada datos usuario |";
     let opcion = "| Selecciona opción a introducir   |";
 
-    // Implementamos la interfaz `Debug` para la estructura `Persona`.
+    /// Implementamos la interfaz `Debug` para la estructura `Persona`
+    /// con los atributos `nombre`, `apellido1`, `apellido2`, `fecha`,
+    /// `sexo` y `dni`.
     struct Persona {
         nombre: String,
         apellido1: String,
@@ -16,7 +18,8 @@ fn main() {
         sexo: String,
         dni: String,
     }
-
+    /// Creamos una función para imprimir el menú.
+    /// Esta función no recibe ningún parámetro y no devuelve nada.
     let imprimir_menu = || {
         println!("{}", igual.repeat(36));
         println!("{}", menu);
@@ -33,10 +36,14 @@ fn main() {
         println!("{}", "8. Salir");
         println!("{}", linea.repeat(33));
     };
+    /// Creamos una función para leer la entrada del usuario.
+    /// Esta función no recibe ningún parámetro y devuelve un `String`.
+    /// El `String` devuelto es la entrada del usuario.
     struct Datos {
         persona: Persona,
     }
-
+    /// Creamos una función para leer la entrada del usuario.
+    /// Se asigna a cada variable de la estructura `Persona` el valor.
     let mut datos = Datos {
         persona: Persona {
             nombre: String::new(),
@@ -47,7 +54,7 @@ fn main() {
             dni: String::new(),
         },
     };
-
+    /// Creamos un bucle `loop` para que el programa se repita.
     loop {
         // Imprimimos el menú.
         imprimir_menu();
@@ -61,19 +68,26 @@ fn main() {
             dni: String::new(),
         };
 
-        // Leemos la opción del usuario.
+        /// Leemos la opción del usuario.
+        /// Creamos una variable `entrada` de tipo `String` vacía.
+        /// Leemos la entrada del usuario y la guardamos en la variable `entrada`.
         let mut entrada = String::new();
         io::stdin()
             .read_line(&mut entrada)
             .expect("Fallo en lectura");
 
-        // Convertimos la entrada a un número entero.
+        /// Convertimos la entrada a un número entero.
+        /// Creamos una variable `opcion` de tipo `u32` vacía.
+        /// Convertimos la entrada a un número entero y la guardamos en la variable `opcion`.
+        /// Si la conversión falla, se imprime un mensaje de error y se vuelve a pedir la opción.
+        /// Si la conversión es correcta, continúa.
         let entrada: i32 = match entrada.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
 
-        // Realizamos la acción correspondiente a la opción seleccionada.
+        /// Realizamos la acción correspondiente a la opción seleccionada.
+        /// Cada número corresponde a una opción.
         match entrada {
             1 => {
                 println!("Introduce el nombre");
