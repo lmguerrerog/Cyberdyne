@@ -1,4 +1,5 @@
+mod menu_aplicacion;
+
 fn main() {
-    println!("Hello, world!");
-    println!("test_2");
+    menu_aplicacion::aplicacion();
 }
