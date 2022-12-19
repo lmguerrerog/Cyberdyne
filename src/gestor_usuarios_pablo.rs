@@ -2,18 +2,28 @@
 
 use std::io;
 
+use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, Utc};
+use chrono::format::ParseError;
+
+#[derive(Debug,PartialEq)]
+pub enum Gender{
+    Masculin,
+    Feminine,
+    Other
+}
+
 #[derive(Debug,PartialEq)]
 pub struct User {
     pub id: String,
     pub dni: String,
     pub sub_names: String,
     pub name: String,
-    pub gender: String,
+    pub gender: Gender,
     pub nationality: String,
-    pub birt_date: String,
+    pub birt_date: Option<NaiveDate>,
     pub support_number: String,
-    pub expired_date: String,
-    pub can: String,
+    pub expired_date: Option<NaiveDate>,
+    pub can: u32,
 }
 
 pub fn create_user(user: &User) -> Result<(), io::Error> {
@@ -40,165 +50,172 @@ pub fn find_user(user: &User) -> Result<(), io::Error> {
     Ok(())
 }
 
+/// Los siguiente tres métodos son privados porque son principalmente para test
+
 fn get_index(user_id: &str) -> usize {
     let index = &*&user_id.parse::<usize>().unwrap()-1;
     return index;
 }
 
 fn create_user_1() -> User {
+    let birt_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(1980, 01, 01);
+    let expired_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(2025, 01, 01);
     User {
         id: String::from("1"),
         dni: String::from("99999999R"),
-        sub_names: String::from("ESPAÑOLA ESPAÑOLA"),
-        name: String::from("CARMEN"),
-        gender: String::from("F"),
+        sub_names: String::from("León Cruz"),
+        name: String::from("Carmen"),
+        gender: Gender::Feminine,
         nationality: String::from("ESP"),
-        birt_date: String::from("01/01/1980"),
+        birt_date,
         support_number: String::from("BAA000589"),
-        expired_date: String::from("01/01/2025"),
-        can: String::from("987654"),
+        expired_date,
+        can: 987654,
     }
 }
 
 fn create_user_2() -> User {
+    let birt_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(1990, 01, 01);
+    let expired_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(2026, 01, 01);
     User {
         id: String::from("2"),
         dni: String::from("88888888R"),
-        sub_names: String::from("ESPAÑOL ESPAÑOL"),
-        name: String::from("CARLOS"),
-        gender: String::from("M"),
+        sub_names: String::from("Díaz Cano"),
+        name: String::from("Carlos"),
+        gender: Gender::Masculin,
         nationality: String::from("ESP"),
-        birt_date: String::from("01/01/1990"),
+        birt_date,
         support_number: String::from("BAA000985"),
-        expired_date: String::from("01/01/2026"),
-        can: String::from("456789"),
+        expired_date,
+        can: 456789,
     }
 }
 
+/// Para imprimir mensajes por consola al hacer el test: cargo test -- --nocapture
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    pub fn test_create_user() {
-        let user = create_user_1();
-        assert!(create_user(&user).is_ok());
-    }
+    fn test() {
 
-    #[test]
-    pub fn test_read_user() {
-        let user = create_user_1();
-        assert!(read_user(&user.id).is_ok());
-    }
+        /// Se crean los dos usuarios de pruebas y se le asignan los atributos
 
-    #[test]
-    pub fn test_update_user() {
-        let user = create_user_1();
-        assert!(update_user(&user).is_ok());
-    }
-
-    #[test]
-    pub fn test_delete_user_by_id() {
-        let user = create_user_1();
-        assert!(delete_user_by_id(&user.id).is_ok());
-    }
-
-    #[test]
-    pub fn test_delete_user() {
-        let user = create_user_1();
-        assert!(delete_user(&user).is_ok());
-    }
-
-    #[test]
-    pub fn test_find_user() {
-        let user = create_user_1();
-        assert!(find_user(&user).is_ok());
-    }
-
-    #[test]
-    fn test_new_user() {
         let user1 = create_user_1();
-        assert_eq!(user1.id, String::from("1"));
-        assert_eq!(user1.dni, String::from("99999999R"));
-        assert_eq!(user1.sub_names, String::from("ESPAÑOLA ESPAÑOLA"));
-        assert_eq!(user1.name, String::from("CARMEN"));
-        assert_eq!(user1.gender, String::from("F"));
-        assert_eq!(user1.nationality, String::from("ESP"));
-        assert_eq!(user1.birt_date, String::from("01/01/1980"));
-        assert_eq!(user1.support_number, String::from("BAA000589"));
-        assert_eq!(user1.expired_date, String::from("01/01/2025"));
-        assert_eq!(user1.can, String::from("987654"));
         let user2 = create_user_2();
-        assert_eq!(user2.id, String::from("2"));
-        assert_eq!(user2.dni, String::from("88888888R"));
-        assert_eq!(user2.sub_names, String::from("ESPAÑOL ESPAÑOL"));
-        assert_eq!(user2.name, String::from("CARLOS"));
-        assert_eq!(user2.gender, String::from("M"));
-        assert_eq!(user2.nationality, String::from("ESP"));
-        assert_eq!(user2.birt_date, String::from("01/01/1990"));
-        assert_eq!(user2.support_number, String::from("BAA000985"));
-        assert_eq!(user2.expired_date, String::from("01/01/2026"));
-        assert_eq!(user2.can, String::from("456789"));
-    }
 
-    #[test]
-    fn vectors() {
+        /// Se comprueba que no dan errores los siguientes métodos:
+        /// create, read, find, update, delete_by_id, delete_by_user
+
+        assert!(create_user(&user1).is_ok());
+        assert!(read_user(&user1.id).is_ok());
+        assert!(find_user(&user1).is_ok());
+        assert!(update_user(&user1).is_ok());
+        assert!(delete_user_by_id(&user1.id).is_ok());
+        assert!(delete_user(&user1).is_ok());
+
+        /// Se crea el vector que va a alojar los usuarios
+        /// Se crean los usuarios que se van a añadir al vector
+
         let mut vec: Vec<User> = Vec::new();
-        let mut user1 = create_user_1();
-        let mut user2 = create_user_2();
         let mut user1_vector = create_user_1();
         let mut user2_vector = create_user_2();
+
+        /// Se añade los dos usuarios con create_user
+
         match create_user(&user1) {
-            Ok(())=>{
+            Ok(()) => {
                 vec.push(user1_vector);
-                println!("create : {:?}", vec.get(get_index(&user1.id)));
-            },
-            _=>eprintln!("error")
+                let index = get_index(&user1.id);
+                let user_option = vec.get(index);
+                match user_option {
+                    Some(user) => println!("create_user(1)"),
+                    None => eprintln!("User not found"),
+                }
+            }
+            _ => eprintln!("Error"),
         }
         assert_eq!(&user1, &vec[get_index(&user1.id)]);
         match create_user(&user2) {
-            Ok(())=>{
+            Ok(()) => {
                 vec.push(user2_vector);
-                println!("create : {:?}", vec.get(get_index(&user2.id)));
-            },
-            _=>eprintln!("error")
+                let index = get_index(&user2.id);
+                let user_option = vec.get(index);
+                match user_option {
+                    Some(user) => println!("create_user(2)"),
+                    None => eprintln!("User not found"),
+                }
+            }
+            _ => eprintln!("Error"),
         }
         assert_eq!(&user2, &vec[get_index(&user2.id)]);
+
+        /// Se lee el primer usuario con read_user
+
         match read_user(&user1.id) {
-            Ok(())=>println!("read : {:?}",vec.get(get_index(&user1.id))),
-            _=>eprintln!("error")
+            Ok(()) => {
+                let index = get_index(&user1.id);
+                let user_option = vec.get(index);
+                match user_option {
+                    Some(user) => println!("read_user(1)   : {:?}", user),
+                    None => eprintln!("User not found"),
+                }
+            }
+            _ => eprintln!("Error"),
         }
         assert_eq!(&user1.id, &vec[get_index(&user1.id)].id);
+
+        /// Se lee el segundo usuario con find_user
+
         match find_user(&user2) {
-            Ok(())=>println!("find : {:?}", vec.get(get_index(&user2.id))),
-            _=>eprintln!("error")
+            Ok(()) => {
+                let index = get_index(&user2.id);
+                let user_option = vec.get(index);
+                match user_option {
+                    Some(user) => println!("find_user(2)   : {:?}", user),
+                    None => eprintln!("User not found"),
+                }
+            }
+            _ => eprintln!("Error"),
         }
         assert_eq!(&user2.id, &vec[get_index(&user2.id)].id);
+
+        /// Se actualiza el DNI del primer usuario con update_user
+
         match update_user(&user1) {
-            Ok(())=>{
-                *&mut vec[get_index(&user1.id)].name = String::from("MARI CARMEN");
-                println!("update : {:?}", vec.get(get_index(&user1.id)));
-            },
-            _=>eprintln!("error")
+            Ok(()) => {
+                let index = get_index(&user1.id);
+                *&mut vec[index].dni = String::from("00000000B");
+                let user_option = vec.get(index);
+                match user_option {
+                    Some(user) => println!("update_user(1) : {:?}", user),
+                    None => eprintln!("User not found"),
+                }
+            }
+            _ => eprintln!("Error"),
         }
-        assert_eq!(&String::from("MARI CARMEN"), &vec[get_index(&user1.id)].name);
-        match update_user(&user2) {
-            Ok(())=>{
-                *&mut vec[get_index(&user2.id)].name = String::from("JOSE CARLOS");
-                println!("update : {:?}", vec.get(get_index(&user2.id)));
-            },
-            _=>eprintln!("error")
-        }
-        assert_eq!(&String::from("JOSE CARLOS"), &vec[get_index(&user2.id)].name);
+        assert_eq!(&String::from("00000000B"), &vec[get_index(&user1.id)].dni);
+
+        /// Se borra el segundo usuario con delete_user_by_id
+
         match delete_user_by_id(&user2.id) {
-            Ok(())=>println!("delete : {:?}", vec.remove(get_index(&user2.id))),
-            _=>eprintln!("error")
+            Ok(())=>{
+                vec.remove(get_index(&user2.id));
+                println!("delete_user_by_id(2)");
+            },
+            _=>eprintln!("Error")
         }
         assert_eq!(vec.len(),1);
+
+        /// Se borra el primer usuario con delete_user
+
         match delete_user(&user1) {
-            Ok(())=>println!("delete : {:?}", vec.remove(get_index(&user1.id))),
-            _=>eprintln!("error")
+            Ok(())=>{
+                vec.remove(get_index(&user1.id));
+                println!("delete_user(1)");
+            },
+            _=>eprintln!("Error")
         }
         assert_eq!(vec.len(),0);
     }
