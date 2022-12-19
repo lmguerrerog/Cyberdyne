@@ -1,6 +1,6 @@
 use std::io;
 
-pub fn main() {
+pub fn aplicacion() {
     // Creación de las variables para dibujar el menú.
     let linea = "-";
     let igual = "=";
