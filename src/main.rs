@@ -7,6 +7,6 @@ fn main() {
     //test
     println!("Prueba Ricardo, será la buena?");
 
-    menu_aplicacion::main();
+    menu_aplicacion::aplicacion();
     aplicacion_usuario::aplicacion_usuario();
 }
