@@ -1,4 +1,5 @@
+mod menu_amartinc;
+
 fn main() {
-    println!("Hello, world!");
-    println!("test_3");
+    menu_amartinc::menu_aplicacion();
 }
