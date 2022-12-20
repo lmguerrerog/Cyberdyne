@@ -5,14 +5,14 @@ use std::io;
 use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, Utc};
 use chrono::format::ParseError;
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug,PartialEq,Eq)]
 pub enum Gender{
     Masculin,
     Feminine,
     Other
 }
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug,PartialEq,Eq)]
 pub struct User {
     pub id: String,
     pub dni: String,
@@ -53,13 +53,12 @@ pub fn find_user(user: &User) -> Result<(), io::Error> {
 /// Los siguiente tres métodos son privados porque son principalmente para test
 
 fn get_index(user_id: &str) -> usize {
-    let index = &*&user_id.parse::<usize>().unwrap()-1;
-    return index;
+    user_id.parse::<usize>().unwrap()-1
 }
 
 fn create_user_1() -> User {
-    let birt_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(1980, 01, 01);
-    let expired_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(2025, 01, 01);
+    let birt_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(1980, 1, 1);
+    let expired_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(2025, 1, 1);
     User {
         id: String::from("1"),
         dni: String::from("99999999R"),
@@ -75,8 +74,8 @@ fn create_user_1() -> User {
 }
 
 fn create_user_2() -> User {
-    let birt_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(1990, 01, 01);
-    let expired_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(2026, 01, 01);
+    let birt_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(1990, 1, 1);
+    let expired_date: Option<NaiveDate> = NaiveDate::from_ymd_opt(2026, 1, 1);
     User {
         id: String::from("2"),
         dni: String::from("88888888R"),
