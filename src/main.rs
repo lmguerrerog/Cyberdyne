@@ -1,3 +1,6 @@
+mod gestor_usuarios_pablo;
+mod menu_amartinc;
+
 #![warn(clippy::all, rust_2018_idioms)]
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
@@ -12,6 +15,8 @@ mod aplicacion_egui;
 mod menu_aplicacion;
 
 fn main() {
+    // menu amartinc
+    menu_amartinc::menu_aplicacion();
     // println!("Hello, world!");
     // println!("test_3");
     // //test
