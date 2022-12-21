@@ -84,7 +84,7 @@ impl eframe::App for TemplateApp {
                 ui.text_edit_singleline(label_nombre);
                 ui.label("Apellidos:");
                 ui.text_edit_singleline(label_apellidos);
-                ui.label("Fecha:");
+                ui.label("Fecha nacimiento:");
                 ui.text_edit_singleline(label_fecha);
                 ui.label("Dni:");
                 ui.text_edit_singleline(label_dni);
