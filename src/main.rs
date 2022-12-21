@@ -1,6 +1,3 @@
-mod gestor_usuarios_pablo;
-mod menu_amartinc;
-
 #![warn(clippy::all, rust_2018_idioms)]
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
@@ -10,6 +7,8 @@ use egui::{Pos2, Vec2};
 use crate::aplicacion_egui::TemplateApp;
 
 mod aplicacion_usuario;
+mod gestor_usuarios_pablo;
+mod menu_amartinc;
 // mod interfaz_egui;
 mod aplicacion_egui;
 mod menu_aplicacion;
@@ -17,10 +16,6 @@ mod menu_aplicacion;
 fn main() {
     // menu amartinc
     menu_amartinc::menu_aplicacion();
-    // println!("Hello, world!");
-    // println!("test_3");
-    // //test
-    // println!("Prueba Ricardo, será la buena?");
 
     // menu_aplicacion::aplicacion();
     // aplicacion_usuario::aplicacion_usuario();
