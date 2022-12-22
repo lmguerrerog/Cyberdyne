@@ -1,33 +1,38 @@
+use egui::InnerResponse;
 use native_dialog::{MessageDialog, MessageType};
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 
-pub struct TemplateApp {
-    label_nombre: String,
-    label_apellidos: String,
-    label_fecha: String,
+pub struct aplicacion_datos_usuario {
     label_dni: String,
+    label_apellidos: String,
+    label_nombre: String,
+    label_sexo: String,
+    label_nacionalidad: String,
+    label_fecha: String,
 
     // this how you opt-out of serialization of a member
     #[serde(skip)]
     value_edad: i32,
 }
 
-impl Default for TemplateApp {
+impl Default for aplicacion_datos_usuario {
     fn default() -> Self {
         Self {
-            label_nombre: "".to_owned(),
-            label_apellidos: "".to_owned(),
-            label_fecha: "".to_owned(),
             label_dni: "".to_owned(),
+            label_apellidos: "".to_owned(),
+            label_nombre: "".to_owned(),
+            label_sexo: "".to_owned(),
+            label_nacionalidad: "".to_owned(),
+            label_fecha: "".to_owned(),
             value_edad: 0,
         }
     }
 }
 
-impl TemplateApp {
+impl aplicacion_datos_usuario {
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // This is also where you can customize the look and feel of egui using
@@ -43,7 +48,7 @@ impl TemplateApp {
     }
 }
 
-impl eframe::App for TemplateApp {
+impl eframe::App for aplicacion_datos_usuario {
     /// Called by the frame work to save state before shutdown.
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
         eframe::set_value(storage, eframe::APP_KEY, self);
@@ -53,10 +58,12 @@ impl eframe::App for TemplateApp {
     /// Put your widgets into a `SidePanel`, `TopPanel`, `CentralPanel`, `Window` or `Area`.
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         let Self {
-            label_nombre,
-            label_apellidos,
-            label_fecha,
             label_dni,
+            label_apellidos,
+            label_nombre,
+            label_sexo,
+            label_nacionalidad,
+            label_fecha,
             value_edad,
         } = self;
 
@@ -80,21 +87,34 @@ impl eframe::App for TemplateApp {
 
             ui.vertical(|ui| {
                 ui.label("");
-                ui.label("Nombre:");
-                ui.text_edit_singleline(label_nombre);
-                ui.label("Apellidos:");
-                ui.text_edit_singleline(label_apellidos);
-                ui.label("Fecha nacimiento:");
-                ui.text_edit_singleline(label_fecha);
                 ui.label("Dni:");
                 ui.text_edit_singleline(label_dni);
+                ui.label("Apellidos:");
+                ui.text_edit_singleline(label_apellidos);
+                ui.label("Nombre:");
+                ui.text_edit_singleline(label_nombre);
+                ui.label("Sexo:");
+                ui.text_edit_singleline(label_sexo);
+                ui.label("Nacionalidad:");
+                ui.text_edit_singleline(label_nacionalidad);
+                ui.label("Fecha nacimiento:");
+                ui.text_edit_singleline(label_fecha);
                 ui.label("");
             });
 
             ui.add(egui::Slider::new(value_edad, 0..=100).text("Edad"));
-            if ui.button("Incrementar edad").clicked() {
-                *value_edad += 1;
-            }
+            ui.label("");
+            ui.horizontal(|ui| {
+                ui.label("");
+                if ui.button("Incrementar edad").clicked() {
+                    *value_edad += 1;
+                }
+                ui.label("");
+                ui.label("");
+                if ui.button("Reducir edad").clicked() {
+                    *value_edad -= 1;
+                }
+            });
             ui.label("");
             ui.horizontal(|ui| {
                 ui.label("");
@@ -102,8 +122,8 @@ impl eframe::App for TemplateApp {
                 ui.label("");
                 if ui.button("Mostrar").clicked() {
                     let message = format!(
-                        "Nombre: {}\nApellidos: {}\nFecha: {}\nDni: {}\nEdad: {}",
-                        label_nombre, label_apellidos, label_fecha, label_dni, value_edad
+                        "Dni: {}\nApellidos: {}\nNombre: {}\nSexo: {}\nNacionalidad: {}\nFecha: {}\nEdad: {}",
+                        label_dni, label_apellidos, label_nombre, label_sexo, label_nacionalidad, label_fecha ,value_edad
                     );
                     MessageDialog::new()
                         .set_type(MessageType::Info)
@@ -114,10 +134,12 @@ impl eframe::App for TemplateApp {
                 }
                 ui.label("");
                 if ui.button("Limpiar").clicked() {
-                    *label_nombre = "".to_string();
-                    *label_apellidos = "".to_string();
-                    *label_fecha = "".to_string();
                     *label_dni = "".to_string();
+                    *label_apellidos = "".to_string();
+                    *label_nombre = "".to_string();
+                    *label_sexo = "".to_string();
+                    *label_nacionalidad = "".to_string();
+                    *label_fecha = "".to_string();
                     *value_edad = 0;
                 }
             });
