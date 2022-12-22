@@ -1,7 +1,7 @@
 #![warn(clippy::all, rust_2018_idioms)]
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
-use crate::aplicacion_egui_rfleiva::aplicacion_datos_usuario;
+use crate::aplicacion_egui_rfleiva::AplicacionDatosUsuario;
 use eframe::{HardwareAcceleration, Theme};
 use egui::{Pos2, Vec2};
 
@@ -50,6 +50,6 @@ fn main() {
     eframe::run_native(
         "Gestión datos usuario",
         options,
-        Box::new(|cc| Box::new(aplicacion_datos_usuario::new(cc))),
+        Box::new(|cc| Box::new(AplicacionDatosUsuario::new(cc))),
     );
 }

@@ -1,11 +1,10 @@
-use egui::InnerResponse;
 use native_dialog::{MessageDialog, MessageType};
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 
-pub struct aplicacion_datos_usuario {
+pub struct AplicacionDatosUsuario {
     label_dni: String,
     label_apellidos: String,
     label_nombre: String,
@@ -18,7 +17,7 @@ pub struct aplicacion_datos_usuario {
     value_edad: i32,
 }
 
-impl Default for aplicacion_datos_usuario {
+impl Default for AplicacionDatosUsuario {
     fn default() -> Self {
         Self {
             label_dni: "".to_owned(),
@@ -32,7 +31,7 @@ impl Default for aplicacion_datos_usuario {
     }
 }
 
-impl aplicacion_datos_usuario {
+impl AplicacionDatosUsuario {
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // This is also where you can customize the look and feel of egui using
@@ -48,7 +47,7 @@ impl aplicacion_datos_usuario {
     }
 }
 
-impl eframe::App for aplicacion_datos_usuario {
+impl eframe::App for AplicacionDatosUsuario {
     /// Called by the frame work to save state before shutdown.
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
         eframe::set_value(storage, eframe::APP_KEY, self);
@@ -134,12 +133,12 @@ impl eframe::App for aplicacion_datos_usuario {
                 }
                 ui.label("");
                 if ui.button("Limpiar").clicked() {
-                    *label_dni = "".to_string();
-                    *label_apellidos = "".to_string();
-                    *label_nombre = "".to_string();
-                    *label_sexo = "".to_string();
-                    *label_nacionalidad = "".to_string();
-                    *label_fecha = "".to_string();
+                    label_dni.clear();
+                    label_apellidos.clear();
+                    label_nombre.clear();
+                    label_sexo.clear();
+                    label_nacionalidad.clear();
+                    label_fecha.clear();
                     *value_edad = 0;
                 }
             });
