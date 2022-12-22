@@ -26,7 +26,7 @@ fn main() {
         drag_and_drop_support: true,
         icon_data: None,
         initial_window_pos: Some(Pos2::new(300.0, 300.0)),
-        initial_window_size: Option::from(Vec2::new(100 as f32, 110 as f32)),
+        initial_window_size: Option::from(Vec2::new(100_f32, 110_f32)),
         min_window_size: None,
         max_window_size: None,
         resizable: true,
