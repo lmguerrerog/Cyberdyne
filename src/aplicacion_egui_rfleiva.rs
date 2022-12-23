@@ -48,11 +48,6 @@ impl AplicacionDatosUsuario {
 }
 
 impl eframe::App for AplicacionDatosUsuario {
-    /// Called by the frame work to save state before shutdown.
-    fn save(&mut self, storage: &mut dyn eframe::Storage) {
-        eframe::set_value(storage, eframe::APP_KEY, self);
-    }
-
     /// Called each time the UI needs repainting, which may be many times per second.
     /// Put your widgets into a `SidePanel`, `TopPanel`, `CentralPanel`, `Window` or `Area`.
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
@@ -127,7 +122,7 @@ impl eframe::App for AplicacionDatosUsuario {
                     MessageDialog::new()
                         .set_type(MessageType::Info)
                         .set_title("Datos introducidos")
-                        .set_text(&*message)
+                        .set_text(&message)
                         .show_alert()
                         .unwrap();
                 }
@@ -152,5 +147,10 @@ impl eframe::App for AplicacionDatosUsuario {
                 ui.label("You would normally choose either panels OR windows.");
             });
         }
+    }
+
+    /// Called by the frame work to save state before shutdown.
+    fn save(&mut self, storage: &mut dyn eframe::Storage) {
+        eframe::set_value(storage, eframe::APP_KEY, self);
     }
 }
