@@ -1,4 +1,6 @@
 use native_dialog::{MessageDialog, MessageType};
+use std::fs::File;
+use std::io::Write;
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -112,7 +114,37 @@ impl eframe::App for AplicacionDatosUsuario {
             ui.label("");
             ui.horizontal(|ui| {
                 ui.label("");
-                ui.button("Guardar");
+                if ui.button("Guardar").clicked() {
+                    fn serialize_struct(data: &AplicacionDatosUsuario) -> String {
+                        format!("DNI: {}\nApellidos: {}\nNombre: {}\nSexo: {}\nNacionalidad: {}\nFecha de nacimiento: {}",
+                                data.label_dni, data.label_apellidos, data.label_nombre, data.label_sexo, data.label_nacionalidad, data.label_fecha)
+                    }
+                    let data = AplicacionDatosUsuario {
+                        label_dni: label_dni.to_owned(),
+                        label_apellidos: label_apellidos.to_owned(),
+                        label_nombre: label_nombre.to_owned(),
+                        label_sexo: label_sexo.to_owned(),
+                        label_nacionalidad: label_nacionalidad.to_owned(),
+                        label_fecha: label_fecha.to_owned(),
+                        value_edad: value_edad.to_string().parse::<i32>().unwrap(),
+                    };
+
+                    let serialized_data = serialize_struct(&data);
+
+                    //Cambiar la ruta por la que corresponda
+                    let mut file = match File::create("C:\\Users\\rfleiva\\Desktop\\DatosUsuario.txt") {
+                        Ok(file) => file,
+                        Err(_error) => {
+                            println!("Error creando el archivo: {}", _error);
+                            return;
+                        }
+                    };
+
+                    match file.write_all(serialized_data.as_bytes()) {
+                        Ok(_) => println!("Archivo guardado satisfactoriamente."),
+                        Err(_error) => println!("Error guardando el archivo: {}", _error)
+                    }
+                }
                 ui.label("");
                 if ui.button("Mostrar").clicked() {
                     let message = format!(
